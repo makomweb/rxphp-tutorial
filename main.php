@@ -18,14 +18,11 @@ Scheduler::setDefaultFactory(function() use($loop){
 $fruits = ['apple', 'banana', 'orange', 'raspberry'];
 
 Observable::fromArray($fruits)
-    ->map(function($value) {
-        if (strcmp($value, 'orange') === 0) {
-            throw new Exception('Oranges are not allowed!');
-        }
-        return $value;
-    })
     ->subscribe(
         function($value) {
+            if (strcmp($value, 'orange') === 0) {
+                throw new Exception('Oranges are not allowed!');
+            }
             printf('%s: %d' . PHP_EOL, $value, strlen($value));
         },
         function (Exception $error) {
