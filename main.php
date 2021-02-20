@@ -2,7 +2,6 @@
 
 use React\EventLoop\Factory;
 use Rx\Observable;
-use Rx\Observer\CallbackObserver;
 use Rx\Scheduler;
 use Rx\Scheduler\EventLoopScheduler;
 
