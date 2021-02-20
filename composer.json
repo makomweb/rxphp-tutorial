@@ -1,0 +1,11 @@
+{
+    "require": {
+        "reactivex/rxphp": "^2.0"
+    },
+    "authors": [
+        {
+            "name": "Martin Komischke",
+            "email": "martin.komischke@gmail.com"
+        }
+    ]
+}
