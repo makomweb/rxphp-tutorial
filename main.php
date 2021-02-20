@@ -4,6 +4,7 @@ use React\EventLoop\Factory;
 use Rx\Observable;
 use Rx\Observer\CallbackObserver;
 use Rx\Scheduler;
+use Rx\Scheduler\EventLoopScheduler;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
@@ -11,21 +12,29 @@ $loop = Factory::create();
 
 //You only need to set the default scheduler once
 Scheduler::setDefaultFactory(function() use($loop){
-    return new Scheduler\EventLoopScheduler($loop);
+    return new EventLoopScheduler($loop);
 });
 
 $fruits = ['apple', 'banana', 'orange', 'raspberry'];
 
-$observer = new CallbackObserver(
-    function($value) { printf('%s', $value); },
-    null,
-    function() { print('Completed'); }
-);
-
 Observable::fromArray($fruits)
     ->map(function($value) {
-        return strlen($value);
+        if (strcmp($value, 'orange') === 0) {
+            throw new Exception('Oranges are not allowed!');
+        }
+        return $value;
     })
-    ->subscribe($observer);
+    ->subscribe(
+        function($value) {
+            printf('%s: %d' . PHP_EOL, $value, strlen($value));
+        },
+        function (Exception $error) {
+            printf('error: %s' . PHP_EOL, $error->getMessage());
+            print('(completed)' . PHP_EOL);
+        },
+        function() {
+            print('completed'. PHP_EOL);
+        }
+    );
 
 $loop->run();
